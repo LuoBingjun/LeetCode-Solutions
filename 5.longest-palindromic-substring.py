@@ -7,43 +7,22 @@
 # @lc code=start
 class Solution:
     def longestPalindrome(self, s: str) -> str:
-        l = len(s)
-        mem = [[-1 for i in range(l)] for i in range(l)]
+        n = len(s)
+        if n == 0:
+            return ""
+        res = s[0]
+        def extend(i, j, s):
+            while(i >= 0 and j < n and s[i] == s[j]):
+                i -= 1
+                j += 1
+            return s[i + 1:j]
 
-        def eval_mem(i, j):
-            if mem[i][j] != -1:
-                return mem[i][j]
-            # eval
-            if i == j:
-                mem[i][j] = 1
-                return 1
-            else:
-                if s[i] == s[j]:
-                    if j - i == 1:
-                        mem[i][j] = 1
-                        return 1
-                    else:
-                        res = eval_mem(i + 1, j - 1)
-                        mem[i][j] = res
-                        return res
-                else:
-                    mem[i][j] = 0
-                    return 0
-        
-        max_length = 1
-        max_sub = (0, 0)
-
-        for le in range(1, l + 1):
-            if le + 1 > max_length + 2:
-                break
-            for i in range(0, l - le):
-                if eval_mem(i, i + le) == 1 and le + 1 > max_length:
-                    max_length = le + 1
-                    max_sub = (i, i + le)
-                    break
-        
-        i, j = max_sub
-        return s[i:j + 1]
+        for i in range(n - 1):
+            e1 = extend(i, i, s)
+            e2 = extend(i, i + 1, s)
+            if max(len(e1), len(e2)) > len(res):
+                res = e1 if len(e1) > len(e2) else e2
+        return res
                     
 # @lc code=end
 sol = Solution()
