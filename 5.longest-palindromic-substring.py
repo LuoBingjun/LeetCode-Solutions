@@ -9,6 +9,7 @@ class Solution:
     def longestPalindrome(self, s: str) -> str:
         l = len(s)
         mem = [[-1 for i in range(l)] for i in range(l)]
+
         def eval_mem(i, j):
             if mem[i][j] != -1:
                 return mem[i][j]
@@ -33,11 +34,13 @@ class Solution:
         max_sub = (0, 0)
 
         for le in range(1, l + 1):
+            if le + 1 > max_length + 2:
+                break
             for i in range(0, l - le):
-                j = i + le
-                if eval_mem(i, j) == 1 and j - i + 1 > max_length:
-                    max_length = j - i + 1
-                    max_sub = (i, j)
+                if eval_mem(i, i + le) == 1 and le + 1 > max_length:
+                    max_length = le + 1
+                    max_sub = (i, i + le)
+                    break
         
         i, j = max_sub
         return s[i:j + 1]
