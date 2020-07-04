@@ -7,27 +7,36 @@
 # @lc code=start
 class Solution:
     def isMatch(self, s: str, p: str) -> bool:
+        dp = [[-1 for j in range(len(p) + 1)] for i in range(len(s) + 1)]
+
         def _isMatch(i, j) -> bool: 
+            if dp[i][j] != -1:
+                return dp[i][j]
+
             if j == len(p):
                 if i == len(s):
+                    dp[i][j] = True
                     return True
                 else:
+                    dp[i][j] = False
                     return False
 
             if j == len(p) - 1 or p[j + 1] != '*':
                 if i == len(s):
-                    return False
+                    dp[i][j] = False
                 elif s[i] == p[j] or p[j] == '.':
-                    return _isMatch(i + 1, j + 1)
+                    dp[i][j] = _isMatch(i + 1, j + 1)
+                else:
+                    dp[i][j] = False
             else: #p[j + 1] == '*'
                 if i == len(s):
-                    return _isMatch(i, j + 2)
+                    dp[i][j] = _isMatch(i, j + 2)
                 elif s[i] == p[j] or p[j] == '.':
-                    return _isMatch(i + 1, j) or _isMatch(i, j + 2)
+                    dp[i][j] = _isMatch(i + 1, j) or _isMatch(i, j + 2)
                 else:
-                    return _isMatch(i, j + 2)
+                    dp[i][j] = _isMatch(i, j + 2)
             
-            return False
+            return dp[i][j]
 
         return _isMatch(0, 0)
 # @lc code=end
