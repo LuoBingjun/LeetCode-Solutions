@@ -11,12 +11,19 @@ class Solution:
         j = len(height) - 1
         maxRes = 0
         while i < j:
+            maxRes = max(maxRes, min(height[i], height[j]) * (j - i))
             if height[i] < height[j]:
-                maxRes = max(maxRes, height[i] * (j - i))
-                i += 1
+                h0 = height[i]
+                while True:
+                    i += 1
+                    if height[i] > h0 or i == j:
+                        break
             else:
-                maxRes = max(maxRes, height[j] * (j - i))
-                j -= 1
+                h0 = height[j]
+                while True:
+                    j -= 1
+                    if height[j] > h0 or i == j:
+                        break
         
         return maxRes
 
