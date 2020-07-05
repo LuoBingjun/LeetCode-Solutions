@@ -4,22 +4,27 @@
 # [17] Letter Combinations of a Phone Number
 #
 from typing import List
+from collections import deque
 # @lc code=start
 class Solution:
     def letterCombinations(self, digits: str) -> List[str]:
         mapping = ["abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"]
         ans = []
-        def DFS(s, k):
-            digit = int(digits[k])
-            if k == len(digits) - 1:
-                for c in mapping[digit-2]:
-                    ans.append(s + c)
-            else:
-                for c in mapping[digit-2]:
-                    DFS(s + c, k+1)
+        q = deque()
         
         if len(digits) > 0:
-            DFS("", 0)
+            digit = int(digits[0])
+            for c in mapping[digit-2]:
+                q.append(c)
+            while len(q) > 0:
+                s = q.popleft()
+                if len(s) < len(digits):
+                    digit = int(digits[len(s)])
+                    for c in mapping[digit-2]:
+                        q.append(s + c)
+                else:
+                    ans.append(s)
+
         return ans
             
 # @lc code=end
