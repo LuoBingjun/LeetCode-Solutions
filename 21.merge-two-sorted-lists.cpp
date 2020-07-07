@@ -29,16 +29,21 @@ class Solution
 public:
     ListNode *mergeTwoLists(ListNode *l1, ListNode *l2)
     {
-        if (l1 == nullptr || (l2 != nullptr && l1->val > l2->val))
+        if (l1 == nullptr)
+            return l2;
+        if (l2 == nullptr)
+            return l1;
+        if (l1->val > l2->val)
         {
             ListNode *tmp = l1;
             l1 = l2;
             l2 = tmp;
         }
         ListNode *head = l1;
+        ListNode *next;
         while (l1 != nullptr && l2 != nullptr)
         {
-            ListNode *next = l1->next;
+            next = l1->next;
             while (next != nullptr && next->val < l2->val)
             {
                 l1 = next;
