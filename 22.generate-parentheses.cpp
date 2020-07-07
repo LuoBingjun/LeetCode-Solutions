@@ -13,19 +13,19 @@ class Solution
 public:
     vector<string> generateParenthesis(int n)
     {
-        vector<set<string>> ans(n + 1);
-        ans[0].insert("");
-        ans[1].insert("()");
+        vector<vector<string>> ans(n + 1);
+        ans[0].push_back("");
+        ans[1].push_back("()");
         for (int i = 2; i <= n; i++)
         {
-            set<string>& v = ans[i];
+            vector<string>& v = ans[i];
             for (int l = 0; l < i; l += 1)
             {
                 for(auto& m : ans[l])
                 {
                     for(auto& n : ans[i - 1 - l])
                     {
-                        v.insert('(' + m + ')' + n);
+                        v.push_back('(' + m + ')' + n);
                     }
                 }
             }
