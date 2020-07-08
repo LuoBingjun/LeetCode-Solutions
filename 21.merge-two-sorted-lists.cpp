@@ -33,40 +33,36 @@ public:
             return l2;
         if (l2 == nullptr)
             return l1;
-        if (l1->val > l2->val)
+        ListNode *cur = new ListNode(-1);
+        ListNode *head = cur;
+        while (l1 != nullptr || l2 != nullptr)
         {
-            ListNode *tmp = l1;
-            l1 = l2;
-            l2 = tmp;
-        }
-        ListNode *head = l1;
-        ListNode *next;
-        while (l1 != nullptr && l2 != nullptr)
-        {
-            next = l1->next;
-            while (next != nullptr && next->val < l2->val)
-            {
-                l1 = next;
-                next = next->next;
-            }
-
-            l1->next = l2;
-            l1 = next;
             if (l1 == nullptr)
-                break;
-
-            next = l2->next;
-            while (next != nullptr && next->val < l1->val)
             {
-                l2 = next;
-                next = next->next;
+                cur->next = l2;
+                cur = cur->next;
+                l2 = l2->next;
             }
-            l2->next = l1;
-            l2 = next;
-            if (l2 == nullptr)
-                break;
+            else if (l2 == nullptr)
+            {
+                cur->next = l1;
+                cur = cur->next;
+                l1 = l1->next;
+            }
+            else if (l1->val < l2->val)
+            {
+                cur->next = l1;
+                cur = cur->next;
+                l1 = l1->next;
+            }
+            else
+            {
+                cur->next = l2;
+                cur = cur->next;
+                l2 = l2->next;
+            }
         }
-        return head;
+        return head->next;
     }
 };
 // @lc code=end
