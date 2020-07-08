@@ -4,6 +4,7 @@
  * [23] Merge k Sorted Lists
  */
 #include <vector>
+#include <algorithm>
 using namespace std;
 struct ListNode
 {
@@ -32,64 +33,34 @@ public:
     {
         if (lists.size() == 0)
             return nullptr;
-        return mergeKLists(lists, 0, lists.size() - 1);
-    }
+        vector<ListNode *> heads;
+        for (ListNode *h : lists)
+        {
+            if (h)
+                heads.push_back(h);
+        }
 
-    ListNode *mergeKLists(vector<ListNode *> &lists, int i, int j)
-    {
-        if (j - i == 0)
-        {
-            return lists[i];
-        }
-        else if (j - i == 1)
-        {
-            return merge2Lists(lists[i], lists[j]);
-        }
-        else
-        {
-            int k = (i + j) / 2;
-            ListNode *a = mergeKLists(lists, i, k);
-            ListNode *b = mergeKLists(lists, k + 1, j);
-            return merge2Lists(a, b);
-        }
-    }
+        auto cmp = [](const ListNode *a, const ListNode *b) -> bool {
+            return a->val > b->val;
+        };
+        make_heap(heads.begin(), heads.end(), cmp);
 
-    ListNode *merge2Lists(ListNode *a, ListNode *b)
-    {
-        if (a == nullptr)
-            return b;
-        if (b == nullptr)
-            return a;
-        ListNode *cur = new ListNode(-1);
-        ListNode *head = cur;
-        while (a || b)
+        ListNode head(-1);
+        ListNode *cur = &head;
+        while (!heads.empty())
         {
-            if (a == nullptr)
+            ListNode* minNode = heads.front();
+            cur->next = minNode;
+            cur = cur->next;
+            pop_heap(heads.begin(), heads.end(), cmp);
+            heads.pop_back();
+            if (minNode->next)
             {
-                cur->next = b;
-                cur = cur->next;
-                b = b->next;
-            }
-            else if (b == nullptr)
-            {
-                cur->next = a;
-                cur = cur->next;
-                a = a->next;
-            }
-            else if (a->val < b->val)
-            {
-                cur->next = a;
-                cur = cur->next;
-                a = a->next;
-            }
-            else
-            {
-                cur->next = b;
-                cur = cur->next;
-                b = b->next;
+                heads.push_back(minNode->next);
+                push_heap(heads.begin(), heads.end(), cmp);
             }
         }
-        return head->next;
+        return head.next;
     }
 };
 // @lc code=end
@@ -97,20 +68,17 @@ public:
 int main()
 {
     Solution sol;
-    ListNode* ans;
-    vector<ListNode*> input0({
-        new ListNode(1, new ListNode(4, new ListNode(5))), 
-        new ListNode(1, new ListNode(3, new ListNode(4))), 
-        new ListNode(2, new ListNode(6))});
+    ListNode *ans;
+    vector<ListNode *> input0({new ListNode(1, new ListNode(4, new ListNode(5))),
+                               new ListNode(1, new ListNode(3, new ListNode(4))),
+                               new ListNode(2, new ListNode(6))});
     ans = sol.mergeKLists(input0);
-    vector<ListNode*> input1({
-        nullptr,
-        new ListNode(2, new ListNode(6)), 
-        nullptr});
+    vector<ListNode *> input1({nullptr,
+                               new ListNode(2, new ListNode(6)),
+                               nullptr});
     ans = sol.mergeKLists(input1);
-    vector<ListNode*> input2({
-        nullptr,
-        nullptr});
+    vector<ListNode *> input2({nullptr,
+                               nullptr});
     ans = sol.mergeKLists(input2);
     return 0;
 }
