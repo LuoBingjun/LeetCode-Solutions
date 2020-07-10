@@ -9,9 +9,8 @@ using namespace std;
 // @lc code=start
 class Solution
 {
-    vector<vector<int>> ans;
-
 public:
+    vector<vector<int>> ans;
     vector<vector<int>> combinationSum(vector<int> &candidates, int target)
     {
         sort(candidates.begin(), candidates.end());
@@ -30,20 +29,10 @@ public:
         if (i == candidates.size() || target < candidates[i])
             return;
 
-        int k = target / candidates[i];
-
-        selectElement(candidates, target, path, i + 1);
-
-        while (target >= candidates[i])
+        for (int j = i; j < candidates.size(); j++)
         {
-            target -= candidates[i];
-            path.push_back(candidates[i]);
-            selectElement(candidates, target, path, i + 1);
-        }
-
-        while(k > 0)
-        {
-            k--;
+            path.push_back(candidates[j]);
+            selectElement(candidates, target - candidates[j], path, j);
             path.pop_back();
         }
     }
