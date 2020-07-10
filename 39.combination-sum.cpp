@@ -14,13 +14,13 @@ class Solution
 public:
     vector<vector<int>> combinationSum(vector<int> &candidates, int target)
     {
-        ans.clear();
         sort(candidates.begin(), candidates.end());
-        selectElement(candidates, target, vector<int>(), 0);
+        vector<int> path;
+        selectElement(candidates, target, path, 0);
         return ans;
     }
 
-    void selectElement(vector<int> &candidates, int target, vector<int> path, int i)
+    void selectElement(vector<int> &candidates, int target, vector<int> &path, int i)
     {
         if (target == 0)
         {
@@ -30,12 +30,21 @@ public:
         if (i == candidates.size() || target < candidates[i])
             return;
 
+        int k = target / candidates[i];
+
         selectElement(candidates, target, path, i + 1);
+
         while (target >= candidates[i])
         {
             target -= candidates[i];
             path.push_back(candidates[i]);
             selectElement(candidates, target, path, i + 1);
+        }
+
+        while(k > 0)
+        {
+            k--;
+            path.pop_back();
         }
     }
 };
