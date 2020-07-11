@@ -11,16 +11,11 @@ class Solution
 public:
     int jump(vector<int> &nums)
     {
-        int n = nums.size();
-        if (n < 2)
-            return 0;
-        int start = 0;
-        int end = 0;
-        int step = 0;
-        while (end < n)
+        int n = nums.size(), step = 0, start = 0, end = 0;
+        while (end < n - 1)
         {
             step++;
-            int max_end = end + 1;
+            int max_end = end;
             for (int i = start; i <= end; i++)
             {
                 if (i + nums[i] >= n - 1)
@@ -30,7 +25,7 @@ public:
             start = end + 1;
             end = max_end;
         }
-        return 0;
+        return step;
     }
 };
 // @lc code=end
