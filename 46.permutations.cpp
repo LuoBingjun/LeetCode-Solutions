@@ -5,6 +5,7 @@
  */
 #include <vector>
 #include <set>
+#include <deque>
 using namespace std;
 // @lc code=start
 class Solution
@@ -14,35 +15,26 @@ public:
     vector<vector<int>> permute(vector<int> &nums)
     {
         if (nums.empty())
-        {
-            ans.push_back({});
-            return ans;
-        }
-        set<int> rest(nums.begin(), nums.end());
-        vector<int> path;
-        for (auto i : rest)
-        {
-            DFS(path, rest, i);
-        }
+            return {{}};
+        DFS(nums, 0);
         return ans;
     }
 
-    void DFS(vector<int> &path, set<int> rest, int val)
+    void DFS(vector<int> &nums, int i)
     {
-        rest.erase(val);
-        path.push_back(val);
-        if (rest.empty())
+        if (i == nums.size() - 1)
         {
-            ans.push_back(path);
+            ans.push_back(nums);
         }
         else
         {
-            for (auto i : rest)
+            for (int j = i; j < nums.size(); j++)
             {
-                DFS(path, rest, i);
+                swap(nums[i], nums[j]);
+                DFS(nums, i + 1);
+                swap(nums[i], nums[j]);
             }
         }
-        path.pop_back();
     }
 };
 // @lc code=end
