@@ -12,22 +12,28 @@ using namespace std;
 class Solution
 {
 public:
+    inline string getKey(string str)
+    {
+        sort(str.begin(), str.end());
+        return str;
+    }
+
     vector<vector<string>> groupAnagrams(vector<string> &strs)
     {
-        unordered_map<string, vector<string>> mem;
-        for (int i = 0; i < strs.size(); i++)
+        vector<vector<string>> res;
+        unordered_map<string, int> keyToPos;
+        for (const auto &str : strs)
         {
-            string key(strs[i]);
-            sort(key.begin(), key.end());
-            pair<unordered_map<string, vector<string>>::iterator, bool> ret = mem.emplace(key, vector<string>());
-            ret.first->second.push_back(strs[i]);
+            string k(str);
+            sort(k.begin(), k.end());
+            if (keyToPos.count(k) == 0)
+            {
+                keyToPos[k] = res.size();
+                res.emplace_back();
+            }
+            res[keyToPos[k]].push_back(str);
         }
-        vector<vector<string>> ans;
-        for(auto i : mem)
-        {
-            ans.push_back(i.second);
-        }
-        return ans;
+        return res;
     }
 };
 // @lc code=end
