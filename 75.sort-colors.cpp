@@ -11,24 +11,25 @@ class Solution
 public:
     void sortColors(vector<int> &nums)
     {
-        vector<int> counter(3, 0);
-        for (int i : nums)
-            counter[i]++;
-        int i = 0;
-        while (i < counter[0])
+        int low = 0, mid = 0, high = nums.size() - 1;
+
+        while (mid <= high)
         {
-            nums[i] = 0;
-            i++;
-        }
-        while (i < counter[0] + counter[1])
-        {
-            nums[i] = 1;
-            i++;
-        }
-        while (i < counter[0] + counter[1] + counter[2])
-        {
-            nums[i] = 2;
-            i++;
+            if (nums[mid] == 0)
+            {
+                swap(nums[low], nums[mid]);
+                low++;
+                mid++;
+            }
+            else if (nums[mid] == 1)
+            {
+                mid++;
+            }
+            else if (nums[mid] == 2)
+            {
+                swap(nums[high], nums[mid]);
+                high--;
+            }
         }
     }
 };
